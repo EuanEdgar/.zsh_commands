@@ -65,7 +65,7 @@ git config --global alias.delete-merged "!git branch --merged >/tmp/merged-branc
 
 git config --global core.excludesfile "${COMMANDS_PATH}/.gitignore_global"
 
-git config --global user.name "Euan Edgar"
+git config --global user.name "EuanEdgar"
 git config --global user.email "euan@spicerack.co.uk"
 
 if [ -d ~/.gnupg ]; then
