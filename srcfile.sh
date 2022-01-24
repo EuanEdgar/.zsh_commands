@@ -50,9 +50,6 @@ if [ -s /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; 
   source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
-#Git commands
-git config --global alias.delete-merged '!git branch --merged >/tmp/merged-branches && vi /tmp/merged-branches && xargs git branch -d </tmp/merged-branches; rm /tmp/merged-branches'
-
 #cd commands
 alias htdocs="cd ~/../../Applications/MAMP/htdocs"
 
@@ -151,5 +148,3 @@ unset nvmAvilable
 autoload -Uz compinit && compinit
 
 get_status
-
-git config --global core.excludesfile ~/.gitignore_global
