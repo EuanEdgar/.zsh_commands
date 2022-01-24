@@ -1,3 +1,8 @@
+if [ -z $COMMANDS_PATH ]; then
+  echo 'Set COMMANDS_PATH to the path to .zsh_commands.'
+  exit 1
+fi
+
 check_if_installed(){
   which $1
   installed=$?
@@ -26,6 +31,19 @@ if [[ $installed = 1 ]]; then
 fi
 unset installed
 
+# nvm is a function, check if dir exists instead
+if [ ! -d ~/.nvm ]; then
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+fi
+
+if [[ $os = "mac" ]]; then
+  if [ ! brew list rbenv ]; then
+    brew install rbenv
+  fi
+else
+  echo "Follow instructions to install rbenv here: https://github.com/rbenv/rbenv"
+fi
+
 #Git diff-so-fancy
 check_if_installed diff-so-fancy
 # If not installed
@@ -45,6 +63,10 @@ unset installed
 # git git
 git config --global alias.git '!exec git'
 
+if [ ! -f ~/.gitignore_global ]; then
+  cp ./.gitignore_global ~/.gitignore_global
+fi
+
 # TLDR
 check_if_installed tldr
 # If not installed
@@ -57,8 +79,8 @@ if [[ $installed = 1 ]]; then
   echo "tldr install failed"
   echo "continuing..."
 fi
-
 unset installed
+
 
 check_if_installed thefuck
 if [[ $installed = 1 ]]; then
@@ -83,7 +105,7 @@ if [[ $installed = 0 ]]; then
     brew install zsh-git-prompt
   fi
 fi
-unset $installed
+unset installed
 
 check_if_installed brew
 if [[ $installed = 0 ]]; then
@@ -118,6 +140,4 @@ if [[ $TERM_PROGRAM = 'iTerm.app' ]]; then
   chmod +x "$COMMANDS_PATH/apps/colour.sh"
 fi
 
-if [ ! -f ~/.gitignore_global ]; then
-  touch ~/.gitignore_global
-fi
+echo "To load iterm2 profiles, open preferences -> profiles -> other actions -> import JSON profiles and load ${COMMANDS_PATH}/.iterm2_profiles.json"
