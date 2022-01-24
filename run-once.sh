@@ -63,9 +63,9 @@ unset installed
 # git git
 git config --global alias.git '!exec git'
 
-if [ ! -f ~/.gitignore_global ]; then
-  cp ./.gitignore_global ~/.gitignore_global
-fi
+git config --global alias.delete-merged "!git branch --merged >/tmp/merged-branches && vi /tmp/merged-branches && xargs git branch -d </tmp/merged-branches; rm /tmp/merged-branches"
+
+git config --global core.excludesfile "${COMMANDS_PATH}/.gitignore_global"
 
 # TLDR
 check_if_installed tldr
