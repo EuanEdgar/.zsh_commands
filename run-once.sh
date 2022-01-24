@@ -37,9 +37,7 @@ if [ ! -d ~/.nvm ]; then
 fi
 
 if [[ $os = "mac" ]]; then
-  if [ ! brew list rbenv ]; then
-    brew install rbenv
-  fi
+  brew install rbenv
 else
   echo "Follow instructions to install rbenv here: https://github.com/rbenv/rbenv"
 fi
@@ -66,6 +64,13 @@ git config --global alias.git '!exec git'
 git config --global alias.delete-merged "!git branch --merged >/tmp/merged-branches && vi /tmp/merged-branches && xargs git branch -d </tmp/merged-branches; rm /tmp/merged-branches"
 
 git config --global core.excludesfile "${COMMANDS_PATH}/.gitignore_global"
+
+git config --global user.name "Euan Edgar"
+git config --global user.email "euan@spicerack.co.uk"
+
+if [ -d ~/.gnupg ]; then
+  git config --global commit.gpgsign true
+fi
 
 # TLDR
 check_if_installed tldr

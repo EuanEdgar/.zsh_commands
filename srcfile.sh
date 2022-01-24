@@ -135,14 +135,9 @@ if [[ $TERM_PROGRAM = 'iTerm.app' ]]; then
   set_folder_colour
 fi
 
-# NVM
-nvmAvilable=$(which nvm && echo 0)
-if [[ !nvmAvilable = 0 ]]; then
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-fi
-unset nvmAvilable
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 #AUTROLOAD!
 autoload -Uz compinit && compinit
