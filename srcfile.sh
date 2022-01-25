@@ -1,4 +1,5 @@
 COMMANDS_PATH="$HOME/.zsh_commands"
+HAS_TOUCHBAR=''
 
 export PATH="$COMMANDS_PATH/zsh-git-prompt/src/.bin:$PATH"
 
@@ -27,7 +28,11 @@ function get_status {
       s="$(basename $git_root_dir)${PWD#"$git_root_dir"}"
     fi
 
-    set_status $s 'prompt'
+    if [[ ! -z $HAS_TOUCHBAR ]]; then
+      set_status $s 'prompt'
+    else
+      set_title $s 'prompt'
+    fi
   fi
 }
 
@@ -130,6 +135,25 @@ if [[ $TERM_PROGRAM = 'iTerm.app' ]]; then
 
   function clear_status {
     export CUSTOM_STATUS=''
+  }
+
+  function title {
+    echo -ne "\033]0;"$*"\007"
+  }
+
+  function set_title {
+    if [[ ! -z "$2" ]] && [ $2 = 'prompt' ]; then
+      if [ -z $CUSTOM_TITLE ]; then
+        title $1
+      fi
+    else
+      export CUSTOM_TITLE='true'
+      title $1
+    fi
+  }
+
+  function clear_title {
+    export CUSTOM_TITLE=''
   }
 
   set_folder_colour
