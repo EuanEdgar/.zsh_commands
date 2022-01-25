@@ -138,6 +138,19 @@ fi
 
 unset installed
 
+check_if_installed aws
+if [[ $installed = 1 ]]; then
+  if [[ $os = "mac" ]]; then
+    curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg" &&\
+      sudo installer -pkg AWSCLIV2.pkg -target / &&\
+      rm AWSCLIV2.pkg
+  else
+    echo "You should install the AWS CLI"
+  fi
+fi
+unset installed
+
+
 chmod +x "$COMMANDS_PATH/apps/swap.sh"
 chmod +x "$COMMANDS_PATH/apps/php_serve.sh"
 
