@@ -142,4 +142,6 @@ export NVM_DIR="$HOME/.nvm"
 #AUTROLOAD!
 autoload -Uz compinit && compinit
 
+source "${HOMEBREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
 get_status
