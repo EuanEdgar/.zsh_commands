@@ -31,6 +31,12 @@ if [[ $installed = 1 ]]; then
 fi
 unset installed
 
+check_if_installed yarn
+if [[ $installed = 1 ]]; then
+  npm i --g yarn
+fi
+unset installed
+
 # nvm is a function, check if dir exists instead
 if [ ! -d ~/.nvm ]; then
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
