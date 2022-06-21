@@ -70,9 +70,9 @@ alias rgrep="ps aux | grep rspec"
 routes() {
   search=$1
   if [[ -n "$search" ]]; then
-    be rake routes | grep $search
+    be rails routes | grep $search
   else
-    be rake routes
+    be rails routes
   fi
 }
 
@@ -111,7 +111,15 @@ alias swap="$COMMANDS_PATH/apps/swap.sh"
 
 alias prettyping="$COMMANDS_PATH/apps/prettyping --nolegend"
 
-alias cat="bat"
+function cat {
+  if [ -z "$1" ]; then
+    bat $@
+  elif [[ $(which imgcat) && "$(file $1)" == *"Image"* || "$(file $1)" == *"image"* ]]; then
+    imgcat $1
+  else
+    bat $@
+  fi
+}
 
 alias backup="$COMMANDS_PATH/apps/backup.sh"
 
@@ -162,6 +170,17 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+function ngrok-host {
+  colour '#1f1e37'
+  ngrok http -subdomain ee-dev $@
+  colour prev
+}
+
+function disable_thread_safety {
+  export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+  export DISABLE_SPRING=true
+}
 
 #AUTROLOAD!
 autoload -Uz compinit && compinit
