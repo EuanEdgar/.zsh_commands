@@ -15,6 +15,16 @@ ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[green]%}%{+%G%}"
 ZSH_THEME_GIT_PROMPT_CHANGED="%{$fg[red]%}%{~%G%}"
 setopt PROMPT_SUBST
 
+copy_function() {
+  test -n "$(declare -f "$1")" || return
+  eval "${_/$1/$2}"
+}
+
+rename_function() {
+  copy_function "$@" || return
+  unset -f "$1"
+}
+
 function get_status {
   if [ $TERM_PROGRAM = iTerm.app ]; then
     git_root_dir=$(git rev-parse --show-toplevel 2>/dev/null)
@@ -123,10 +133,16 @@ function cat {
 
 alias backup="$COMMANDS_PATH/apps/backup.sh"
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
 if [[ $TERM_PROGRAM = 'iTerm.app' ]]; then
   # alias colour="$COMMANDS_PATH/apps/colour.sh"
   source "$COMMANDS_PATH/apps/colour2.sh"
   source "$COMMANDS_PATH/apps/folder_colour.sh"
+  source "$COMMANDS_PATH/apps/set_node_version.sh"
   source "$COMMANDS_PATH/apps/cd.sh"
   source "$COMMANDS_PATH/apps/preexec.sh"
 
@@ -166,10 +182,6 @@ if [[ $TERM_PROGRAM = 'iTerm.app' ]]; then
 
   set_folder_colour
 fi
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 function ngrok-host {
   colour '#1f1e37'
