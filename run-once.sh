@@ -69,6 +69,8 @@ git config --global alias.git '!exec git'
 
 git config --global alias.delete-merged "!git branch --merged >/tmp/merged-branches && vi /tmp/merged-branches && xargs git branch -d </tmp/merged-branches; rm /tmp/merged-branches"
 
+git config --global alias.uncommit "reset --soft HEAD^"
+
 git config --global core.excludesfile "${COMMANDS_PATH}/.gitignore_global"
 
 git config --global user.name "EuanEdgar"
