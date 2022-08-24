@@ -5,19 +5,9 @@ set_node_version(){
 }
 
 use_folder_node_version() {
-  version_file='.node-version'
-  version_dir=$(pwd)
-  while [ ! -s $version_file ] ; do
-    parent_dir=$(dirname $version_dir)
+  version_file=$(reverse_find_file '.node-version')
 
-    version_file="$parent_dir/.node-version"
-
-    [[ $version_dir = / ]] && break
-
-    version_dir=$parent_dir
-  done
-
-  if [ -s $version_file ]; then
+  if [ -s "$version_file" ]; then
     version=$(< $version_file)
 
     if [[ $version != $FOLDER_NODE_VERSION ]]; then
@@ -34,4 +24,8 @@ nvm() {
   unset FOLDER_NODE_VERSION
   _nvm "$@"
   return $?
+}
+
+reset_node_version() {
+  unset NVM_ACTIVE
 }

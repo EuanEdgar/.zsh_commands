@@ -112,6 +112,8 @@ alias fuck="fuck -r"
 alias reload="source ~/.zshrc"
 
 #Tools
+source "$COMMANDS_PATH/apps/reverse_find_file.sh"
+
 alias devserve="$COMMANDS_PATH/apps/php_serve.sh"
 
 alias rb="ruby $COMMANDS_PATH/apps/rb.rb"
