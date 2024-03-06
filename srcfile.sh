@@ -59,14 +59,14 @@ function git_super_status_wrapper {
   fi
 }
 
+# python is not installed by default anymore
+alias python=python3
+
 PROMPT='%{$(update_colour)%}%{$(get_status)%}%m$(git_super_status_wrapper)%# '
 
 if [ -s /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
   source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
-
-#cd commands
-alias htdocs="cd ~/../../Applications/MAMP/htdocs"
 
 #rbenv
 export PATH="$HOME/.rbenv/bin:$PATH"
