@@ -21,11 +21,11 @@ getChoice() {
 backup(){
   file=$1
 
-  if [ -f $file ]; then
+  if [ -e $file ]; then
     backup_target="$file.bak"
 
     attempt=1
-    while [[ -f $backup_target ]]; do
+    while [[ -e $backup_target ]]; do
       attempt=$((attempt+1))
 
       new_backup_target="$file.bak$attempt"
@@ -33,7 +33,7 @@ backup(){
       backup_target=$new_backup_target
     done
 
-    cp $file $backup_target
+    cp -r $file $backup_target
     echo "Backed up $file to $backup_target."
   else
     echo "Target $file is not a file"
@@ -44,7 +44,7 @@ backup(){
 restore(){
   file=$1
 
-  if [ -f $file ]; then
+  if [ -e $file ]; then
     if [[ $file =~ (.*)\.bak([0-9]+)?$ ]]; then
       basefile=$(echo "${BASH_REMATCH[1]}")
       backup=$file
@@ -67,9 +67,11 @@ restore(){
     read -p "This will overwrite $basefile and $(ls $filepattern | wc -l | xargs) backup file(s). Continue? ([Y]es/[N]o/[K]eep backup) " -r
 
     if [[ $REPLY == [yY] ]]; then
+      rm -r $basefile
       mv $backup $basefile
     elif [[ $REPLY == [kK] ]]; then
-      cp $backup $basefile
+      rm -r $basefile
+      cp -r $backup $basefile
     fi
 
     if [[ $REPLY == [yY] ]]; then
