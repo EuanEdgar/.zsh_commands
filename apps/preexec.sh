@@ -14,7 +14,9 @@ preexec() {
     temp_colour red
   elif match $command '^(be )?rails c'; then
     temp_colour orange
-  elif match $command '^yarn start$'; then
+  elif match $command '^yarn start(\s|$)'; then
+    temp_colour blue
+  elif match $command '^yarn dev(\s|$)'; then
     temp_colour blue
   elif match $command '^ssh\s'; then
     temp_colour purple
