@@ -64,10 +64,19 @@ else
 fi
 unset installed
 
+check_if_installed git-filter-repo
+if [[ $installed = 1 ]]; then
+  if [[ $os = "mac" ]]; then
+    brew install git-filter-repo
+  elif [[ $os = "ubuntu" ]]; then
+    apt install git-filter-repo
+  fi
+fi
+
 # git git
 git config --global alias.git '!exec git'
 
-git config --global alias.delete-merged "!git branch --merged >/tmp/merged-branches && vi /tmp/merged-branches && xargs git branch -d </tmp/merged-branches; rm /tmp/merged-branches"
+git config --global alias.delete-merged "!git branch --merged | grep -v '^\\*' > /tmp/merged-branches && vi /tmp/merged-branches && xargs git branch -d </tmp/merged-branches; rm /tmp/merged-branches"
 
 git config --global alias.uncommit "reset --soft HEAD^"
 
@@ -138,7 +147,7 @@ if [[ $installed = 1 ]]; then
       echo "bat install failed\
       continuing..."
     fi
-  elif [[ $ox = "ubuntu" ]]; then
+  elif [[ $os = "ubuntu" ]]; then
     echo "To install bat (cat replacement), follow instructions here:\
     https://github.com/sharkdp/bat#installation"
   fi
