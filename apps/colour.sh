@@ -26,7 +26,7 @@ exit_bad_hex=2
 this=$0
 
 colour(){
-  $this $1 $2 $3
+  $this $@
   exit 0
 }
 

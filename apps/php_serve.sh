@@ -22,16 +22,16 @@ if [[ ! $port =~ ^[0-9]+$ ]] ; then
   exit $exit_invalid_port
 fi
 
+host="0.0.0.0:$port"
+
 line=$(ifconfig | grep 192 | head -n 1)
 
-regex='^.*(([0-9]{3}\.[0-9]{1,3}\.[0-9]{1,3}\.[1-9]{1,3}))'
+regex='inet ([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)'
 ip=$([[ $line =~ $regex ]] &&
   echo ${BASH_REMATCH[1]})
 
-host="$ip:$port"
-
 echo "Starting local development server on:
-  $host
+  http://$ip:$port
 "
 
 php -S $host
