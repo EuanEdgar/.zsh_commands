@@ -80,6 +80,37 @@ git config --global alias.delete-merged "!git branch --merged | grep -v '^\\*' >
 
 git config --global alias.uncommit "reset --soft HEAD^"
 
+git config --global alias.checkout-pr "!f() {\
+  if [ -z \"\$1\" ]; then\
+    echo 'Usage: git checkout-pr <PR number>';\
+    return 1;\
+  fi;\
+  if git show-ref --verify --quiet refs/heads/pr-\$1; then\
+    echo \"Branch pr-\$1 already exists, checking it out\";\
+    git checkout pr-\$1;\
+    return 0;\
+  fi;\
+  git fetch origin pull/\$1/head:pr-\$1 && git checkout pr-\$1;\
+}; f"
+
+git config --global alias.delete-pr "!f() {\
+  if [ -z \"\$1\" ]; then\
+    echo 'Usage: git delete-pr <PR number>';\
+    return 1;\
+  fi;\
+  if ! git show-ref --verify --quiet refs/heads/pr-\$1; then\
+    echo \"Branch pr-\$1 does not exist\";\
+    return 1;\
+  fi;\
+  git branch -D pr-\$1;\
+}; f"
+
+git config --global alias.delete-all-prs "!f() {\
+  git branch --format='%(refname:short)' | grep -E '^pr-\d+$' | while read branch; do\
+    git branch -D \"\$branch\";\
+  done;\
+}; f"
+
 git config --global core.excludesfile "${COMMANDS_PATH}/.gitignore_global"
 
 git config --global user.name "EuanEdgar"

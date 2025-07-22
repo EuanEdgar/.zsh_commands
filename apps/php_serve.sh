@@ -24,14 +24,8 @@ fi
 
 host="0.0.0.0:$port"
 
-line=$(ifconfig | grep 192 | head -n 1)
-
-regex='inet ([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)'
-ip=$([[ $line =~ $regex ]] &&
-  echo ${BASH_REMATCH[1]})
-
 echo "Starting local development server on:
-  http://$ip:$port
+  http://$host
 "
 
 php -S $host

@@ -101,7 +101,7 @@ alias _irb="command irb"
 alias irb="pry"
 
 #DNS
-alias hosts="atom /etc/hosts"
+alias hosts="cod /etc/hosts"
 alias refresh_dns="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
 
 #Fuck
@@ -122,6 +122,8 @@ alias escape_spaces="rb -l \"gsub(' ', '\ ')\""
 alias swap="$COMMANDS_PATH/apps/swap.sh"
 
 alias prettyping="$COMMANDS_PATH/apps/prettyping --nolegend"
+
+alias wait_for_docker="$COMMANDS_PATH/apps/wait_for_docker.sh"
 
 function cat {
   if [ -z "$1" ]; then
@@ -194,6 +196,28 @@ function ngrok-host {
 function disable_thread_safety {
   export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
   export DISABLE_SPRING=true
+}
+
+function cod() {
+  read -r -d '' fish <<- 'EOF'
+		Glub      /\
+		  glub# _/./
+		    ,-'    `-:..-'/
+		    : o )      _  (
+		    "`-....,--; `-.\
+		        `'
+EOF
+
+  if [ -e './.fishy' ]; then
+    fish=$(cat .fishy)
+  fi
+
+  if [ $# -eq 0 ]; then
+    echo $fish | tr '#' '?'
+  else
+    echo $fish | tr '#' ' '
+    code $@
+  fi
 }
 
 #AUTROLOAD!
