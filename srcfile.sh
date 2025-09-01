@@ -25,16 +25,20 @@ rename_function() {
   unset -f "$1"
 }
 
+check_git() {
+  git rev-parse --quiet 2>/dev/null
+}
+
 function get_status {
   if [ $TERM_PROGRAM = iTerm.app ]; then
-    git_root_dir=$(git rev-parse --show-toplevel 2>/dev/null)
-    if [ $? != 0 ]; then
+    if ! check_git; then
       if [[ "${PWD##$HOME}" != "${PWD}" ]]; then
         s="~${PWD#"$HOME"}"
       else
         s=$PWD
       fi
     else
+      git_root_dir=$(git rev-parse --show-toplevel 2>/dev/null)
       s="$(basename $git_root_dir)${PWD#"$git_root_dir"}"
     fi
 
@@ -67,7 +71,7 @@ random () {
   rr=$(( 1 + $RANDOM % $# ))
   echo $@[${rr}]
 }
-PROMPT="$(random 🦀 🐙 🦎 🦑 🦋)%{\$(update_colour)%}%{\$(get_status)%}\$(git_super_status_wrapper)%# "
+PROMPT="$(random 🦀 🐙 🦎 🦑 🦋)%{\$(check_git || echo ' ')%{\$(update_colour)%}%{\$(get_status)%}\$(git_super_status_wrapper)%# "
 
 if [ -s /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
   source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
