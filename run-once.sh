@@ -134,6 +134,17 @@ if [[ $installed = 1 ]]; then
 fi
 unset installed
 
+check_if_installed ag
+if [[ $installed = 1 ]]; then
+  brew install the_silver_searcher
+fi
+
+check_if_installed ag
+if [[ $installed = 1 ]]; then
+  echo "silver searcher install failed"
+  echo "continuing..."
+fi
+unset installed
 
 check_if_installed thefuck
 if [[ $installed = 1 ]]; then
