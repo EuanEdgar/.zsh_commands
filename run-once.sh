@@ -52,7 +52,7 @@ fi
 check_if_installed diff-so-fancy
 # If not installed
 if [[ $installed = 1 ]]; then
-  sudo npm install -g diff-so-fancy
+  brew install diff-so-fancy
 fi
 # If already installed or successfuly installed
 check_if_installed diff-so-fancy
