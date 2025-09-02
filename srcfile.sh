@@ -71,7 +71,21 @@ random () {
   rr=$(( 1 + $RANDOM % $# ))
   echo $@[${rr}]
 }
-PROMPT="$(random 🦀 🐙 🦎 🦑 🦋)%{\$(check_git || echo ' ')%{\$(update_colour)%}%{\$(get_status)%}\$(git_super_status_wrapper)%# "
+
+precmd() {
+  update_colour
+  get_status
+}
+pretty_pwd() {
+  p=$(pwd)
+  if [[ $p == $HOME* ]]; then
+    echo "${p/${HOME}/~}"
+  else
+    echo $p
+  fi
+}
+PROMPT="$(random 🦀 🐙 🦎 🦑 🦋)\$(check_git || echo \" \$(pretty_pwd)\")\$(git_super_status_wrapper)
+> "
 
 if [ -s /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
   source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -133,6 +147,7 @@ alias swap="$COMMANDS_PATH/apps/swap.sh"
 alias prettyping="$COMMANDS_PATH/apps/prettyping --nolegend"
 
 alias wait_for_docker="$COMMANDS_PATH/apps/wait_for_docker.sh"
+source "$COMMANDS_PATH/apps/docker.sh"
 
 function cat {
   if [ -z "$1" ]; then
