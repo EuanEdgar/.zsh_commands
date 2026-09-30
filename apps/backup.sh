@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 getChoice() {
   {
     local prompt=${1}
@@ -64,10 +66,20 @@ restore(){
 
     filepattern="$basefile.bak*"
 
-    read -p "This will overwrite $basefile and $(ls $filepattern | wc -l | xargs) backup file(s). Continue? ([Y]es/[N]o/[K]eep backup) " -r
+    if [ -e $basefile ]; then
+      read -p "This will overwrite $basefile and $(ls $filepattern | wc -l | xargs) backup file(s). Continue? ([Y]es/[N]o/[K]eep backup) " -r
+    else
+      echo "Base file does not exist; renaming backup to $basefile"
+      # Auto-confirm - there is no basefile to overwrite
+      REPLY="y"
+    fi
 
     if [[ $REPLY == [yY] ]]; then
-      rm -r $basefile
+      if [ -e $basefile ]; then
+        rm -r $basefile
+      else
+        echo "Basefile $basefile does not exist"
+      fi
       mv $backup $basefile
     elif [[ $REPLY == [kK] ]]; then
       rm -r $basefile

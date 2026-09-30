@@ -1,3 +1,7 @@
+# Finds a file in the current directory or any parent directory
+# Usage: reverse_find_file <file_name>
+# Returns: The path to the file if found, otherwise empty
+# Example: colour_file=$(reverse_find_file '.colour')
 reverse_find_file(){
   target_file_name=$1
 

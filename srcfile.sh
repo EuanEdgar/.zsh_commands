@@ -30,22 +30,16 @@ check_git() {
 }
 
 function get_status {
-  if [ $TERM_PROGRAM = iTerm.app ]; then
-    if ! check_git; then
-      if [[ "${PWD##$HOME}" != "${PWD}" ]]; then
-        s="~${PWD#"$HOME"}"
+  if [ -z $TAB_NAME ]; then
+    set_folder_tab_name
+  fi
+  if [ ! -z $TAB_NAME ]; then
+    if [ $TERM_PROGRAM = iTerm.app ]; then
+      if [[ ! -z $HAS_TOUCHBAR ]]; then
+        set_status $TAB_NAME 'prompt'
       else
-        s=$PWD
+        set_title $TAB_NAME 'prompt'
       fi
-    else
-      git_root_dir=$(git rev-parse --show-toplevel 2>/dev/null)
-      s="$(basename $git_root_dir)${PWD#"$git_root_dir"}"
-    fi
-
-    if [[ ! -z $HAS_TOUCHBAR ]]; then
-      set_status $s 'prompt'
-    else
-      set_title $s 'prompt'
     fi
   fi
 }
@@ -65,6 +59,7 @@ function git_super_status_wrapper {
 
 # python is not installed by default anymore
 alias python=python3
+alias pip=pip3
 
 random () {
   local rr
@@ -84,7 +79,7 @@ pretty_pwd() {
     echo $p
   fi
 }
-PROMPT="$(random 🦀 🐙 🦎 🦑 🦋)\$(check_git || echo \" \$(pretty_pwd)\")\$(git_super_status_wrapper)
+PROMPT="$(random 🦀 🐙 🦎 🦑 🦋 🐝 🦕 🦆)\$(check_git || echo \" \$(pretty_pwd)\")\$(git_super_status_wrapper)
 > "
 
 if [ -s /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
@@ -149,15 +144,11 @@ alias prettyping="$COMMANDS_PATH/apps/prettyping --nolegend"
 alias wait_for_docker="$COMMANDS_PATH/apps/wait_for_docker.sh"
 source "$COMMANDS_PATH/apps/docker.sh"
 
-function cat {
-  if [ -z "$1" ]; then
-    bat $@
-  elif [[ $(which imgcat) && "$(file $1)" == *"Image"* || "$(file $1)" == *"image"* ]]; then
-    imgcat $1
-  else
-    bat $@
-  fi
-}
+source "$COMMANDS_PATH/apps/date.sh"
+
+alias copy_pnpm_audit_status="$COMMANDS_PATH/apps/pnpm_audit_status.sh"
+
+alias cat=bat
 
 alias backup="$COMMANDS_PATH/apps/backup.sh"
 
@@ -170,9 +161,7 @@ if [[ $TERM_PROGRAM = 'iTerm.app' ]]; then
   # alias colour="$COMMANDS_PATH/apps/colour.sh"
   source "$COMMANDS_PATH/apps/colour2.sh"
   source "$COMMANDS_PATH/apps/folder_colour.sh"
-  source "$COMMANDS_PATH/apps/set_node_version.sh"
-  source "$COMMANDS_PATH/apps/cd.sh"
-  source "$COMMANDS_PATH/apps/preexec.sh"
+  source "$COMMANDS_PATH/apps/set_folder_tab_name.sh"
 
   function set_status {
     if [[ ! -z  "$2" ]] && [ $2 = 'prompt' ]; then
@@ -211,9 +200,13 @@ if [[ $TERM_PROGRAM = 'iTerm.app' ]]; then
   set_folder_colour
 fi
 
+source "$COMMANDS_PATH/apps/set_node_version.sh"
+source "$COMMANDS_PATH/apps/cd.sh"
+source "$COMMANDS_PATH/apps/preexec.sh"
+
 function ngrok-host {
   colour '#1f1e37'
-  ngrok http -subdomain ee-dev $@
+  ngrok http --domain spydr.ngrok.io $@
   colour prev
 }
 
@@ -222,27 +215,8 @@ function disable_thread_safety {
   export DISABLE_SPRING=true
 }
 
-function cod() {
-  read -r -d '' fish <<- 'EOF'
-		Glub      /\
-		  glub# _/./
-		    ,-'    `-:..-'/
-		    : o )      _  (
-		    "`-....,--; `-.\
-		        `'
-EOF
-
-  if [ -e './.fishy' ]; then
-    fish=$(cat .fishy)
-  fi
-
-  if [ $# -eq 0 ]; then
-    echo $fish | tr '#' '?'
-  else
-    echo $fish | tr '#' ' '
-    code $@
-  fi
-}
+source "$COMMANDS_PATH/apps/wrappers/cod.sh"
+source "$COMMANDS_PATH/apps/wrappers/curse.sh"
 
 #AUTROLOAD!
 autoload -Uz compinit && compinit
@@ -250,3 +224,12 @@ autoload -Uz compinit && compinit
 source "${HOMEBREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 get_status
+
+set_node_version
+folder_commands
+
+ssh-add -l > /dev/null 2>&1 || ssh-add
+
+alias nproc="sysctl -n hw.physicalcpu"
+alias ssl_health_check="$COMMANDS_PATH/apps/ssl_health_check"
+
